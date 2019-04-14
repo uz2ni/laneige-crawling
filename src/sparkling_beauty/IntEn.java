@@ -53,20 +53,20 @@ public class IntEn {
 				itemList[i][3] = itemDoc.select("meta[property^=og:description]").attr("content");
 				System.out.println("["+i+"] og:description : " + itemList[i][3]);
 				// [4] 제목
-				itemList[i][4] = itemDoc.select(".content_Title").html();
+				itemList[i][4] = replaceStr(itemDoc.select(".content_Title").html());
 				System.out.println("["+i+"] 제목 : " + itemList[i][4]);
 				// [5] img src
 				src = itemDoc.select(".custom-sparkling-view-imgtype").select("img").attr("src");
 				itemList[i][5] = src.substring(src.lastIndexOf("/")+1);
 				System.out.println("["+i+"] src : " + itemList[i][5]);
 				// [6] 내용 p
-				itemList[i][6] = itemDoc.select(".sparkling-view-context").select("p").html();
+				itemList[i][6] = replaceStr(itemDoc.select(".sparkling-view-context").select("p").html());
 				System.out.println("["+i+"] 내용 : " + itemList[i][6]);
 				// [7] 태그
 				li = itemDoc.select(".sparkling-hash").select("li");
 				tag = "";
 				for(int j=0; j<li.size(); j++) {
-					tag += li.get(j).select("span").html() + " | ";
+					tag += li.get(j).select("span").html() + ",";
 				}
 				itemList[i][7] = tag;
 				System.out.println("["+i+"] tag " + itemList[i][colSize-1]);
@@ -88,7 +88,7 @@ public class IntEn {
 	        	}
 	        }
 	        try {
-	            FileOutputStream fileoutputstream = new FileOutputStream("/Users/uzini/Desktop/Sparkling Beauty/int_en/int_en_data.xlsx");
+	            FileOutputStream fileoutputstream = new FileOutputStream("/Users/uzini/Desktop/Sparkling Beauty/int_en/int_en_data2.xlsx");
 	            workbook.write(fileoutputstream);
 	            fileoutputstream.close();
 	            System.out.println("엑셀파일생성성공");
@@ -107,5 +107,15 @@ public class IntEn {
 		}
 
 	}
+	
+	public static String replaceStr(String a) {
+		a= a.replaceAll("\\&", "&amp;");
+		a= a.replaceAll("\"", "&quot;");
+		a= a.replaceAll("\'", "&#39;");
+		a= a.replaceAll("\\(", "&#40;");
+		a= a.replaceAll("\\)", "&#41;");
+		
+		return a;
+	}	
 
 }

@@ -17,8 +17,11 @@ public class Test {
 	public static void main(String[] args) {
 		// <title>, og:title, keywords, description, 제목, img, 내용, 태그
 
-		File input = new File("/Users/uzini/Desktop/id/Sparkling Beauty.html");
+		//File input = new File("/Users/uzini/Desktop/id/Sparkling Beauty.html");
+		File input = new File("/Users/uzini/Desktop/test.html");
+		
 		try {
+/*
 			//스파클링 뷰티 html 문서 불러오기
 			Document doc = Jsoup.parse(input, "UTF-8", "https://www.laneige.com/id/id/sparkling-beauty.html");
 			
@@ -35,6 +38,15 @@ public class Test {
 			String[][] itemList = new String[el.size()][8];
 			System.out.println("title: " + itemDoc.select(".content_Title").html());
 			System.out.println("content: " + itemDoc.select(".sparkling-view-context").select("p").html());
+			*/
+			
+			Document doc = Jsoup.parse(input, "UTF-8");
+			Elements el = doc.select(".hi");
+			//System.out.println(el.html());
+			
+			String a = replaceStr(el.html());	
+			
+			System.out.println(a);
 			
 			
 			
@@ -118,6 +130,17 @@ public class Test {
 			e.printStackTrace();
 		}
 
+	}
+	
+	public static String replaceStr(String a) {
+		a= a.replaceAll("\"", "&quot;");
+		a= a.replaceAll("\'", "&#39;");
+		a= a.replaceAll("\\(", "&#40;");
+		a= a.replaceAll("\\)", "&#41;");
+		a= a.replaceAll("\\<", "&lt;");
+		a= a.replaceAll("\\>", "&gt;");
+		
+		return a;
 	}
 
 }

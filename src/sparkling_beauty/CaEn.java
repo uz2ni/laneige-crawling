@@ -12,14 +12,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-public class KrKo {
+public class CaEn {
 
 	public static void main(String[] args) {
 		
-		File input = new File("/Users/uzini/Desktop/Sparkling Beauty/my_en/Sparkling Beauty.html");
+		File input = new File("/Users/uzini/Desktop/Sparkling Beauty/ca_en/Define Your Own Beauty.html");
 		try {
 			//스파클링 뷰티 html 문서 불러오기
-			Document doc = Jsoup.parse(input, "UTF-8", "https://www.laneige.com/my/en/sparkling-beauty.html");
+			Document doc = Jsoup.parse(input, "UTF-8", "https://www.laneige.com/ca/en/Define Your Own Beauty.html");
 			
 			// 각 item의 href 파싱
 			Elements el = doc.select(".sparkling-list-item").not(".sparkling-banner");
@@ -47,10 +47,10 @@ public class KrKo {
 				itemList[i][1] = itemDoc.select("meta[property^=og:title]").attr("content");
 				System.out.println("["+i+"] og:title : " + itemList[i][1]);
 				// [2] keywords
-				itemList[i][2] = itemDoc.select("meta[name^=keywords]").get(1).attr("content");
+				itemList[i][2] = "null";
 				System.out.println("["+i+"] keywords : " + itemList[i][2]);
 				// [3] description
-				itemList[i][3] = itemDoc.select("meta[property^=og:description]").attr("content");
+				itemList[i][3] = "null";
 				System.out.println("["+i+"] og:description : " + itemList[i][3]);
 				// [4] 제목
 				itemList[i][4] = replaceStr(itemDoc.select(".content_Title").html());
@@ -88,7 +88,7 @@ public class KrKo {
 	        	}
 	        }
 	        try {
-	            FileOutputStream fileoutputstream = new FileOutputStream("/Users/uzini/Desktop/Sparkling Beauty/my_en/my_en_data.xlsx");
+	            FileOutputStream fileoutputstream = new FileOutputStream("/Users/uzini/Desktop/Sparkling Beauty/ca_en/ca_en_data.xlsx");
 	            workbook.write(fileoutputstream);
 	            fileoutputstream.close();
 	            System.out.println("엑셀파일생성성공");
@@ -110,13 +110,10 @@ public class KrKo {
 	
 	public static String replaceStr(String a) {
 		a= a.replaceAll("\\&", "&amp;");
-		a= a.replaceAll("\\&amp;nbsp;", "&nbsp;");
 		a= a.replaceAll("\"", "&quot;");
 		a= a.replaceAll("\'", "&#39;");
 		a= a.replaceAll("\\(", "&#40;");
 		a= a.replaceAll("\\)", "&#41;");
-		a= a.replaceAll(";;", ";");
-		a= a.replaceAll("<br>", "<br/>");
 		
 		return a;
 	}	

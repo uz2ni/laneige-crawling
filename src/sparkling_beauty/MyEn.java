@@ -46,30 +46,27 @@ public class MyEn {
 				// [1] og:title
 				itemList[i][1] = itemDoc.select("meta[property^=og:title]").attr("content");
 				System.out.println("["+i+"] og:title : " + itemList[i][1]);
-				// [2] keywords
-				itemList[i][2] = itemDoc.select("meta[name^=keywords]").get(1).attr("content");
-				System.out.println("["+i+"] keywords : " + itemList[i][2]);
 				// [3] description
-				itemList[i][3] = itemDoc.select("meta[property^=og:description]").attr("content");
-				System.out.println("["+i+"] og:description : " + itemList[i][3]);
+				itemList[i][2] = itemDoc.select("meta[property^=og:description]").attr("content");
+				System.out.println("["+i+"] og:description : " + itemList[i][2]);
 				// [4] 제목
-				itemList[i][4] = itemDoc.select(".content_Title").html();
-				System.out.println("["+i+"] 제목 : " + itemList[i][4]);
+				itemList[i][3] = replaceStr(itemDoc.select(".content_Title").html());
+				System.out.println("["+i+"] 제목 : " + itemList[i][3]);
 				// [5] img src
 				src = itemDoc.select(".custom-sparkling-view-imgtype").select("img").attr("src");
-				itemList[i][5] = src.substring(src.lastIndexOf("/")+1);
-				System.out.println("["+i+"] src : " + itemList[i][5]);
+				itemList[i][4] = src.substring(src.lastIndexOf("/")+1);
+				System.out.println("["+i+"] src : " + itemList[i][4]);
 				// [6] 내용 p
-				itemList[i][6] = itemDoc.select(".sparkling-view-context").select("p").html();
-				System.out.println("["+i+"] 내용 : " + itemList[i][6]);
+				itemList[i][5] = replaceStr(itemDoc.select(".sparkling-view-context").select("p").html());
+				System.out.println("["+i+"] 내용 : " + itemList[i][5]);
 				// [7] 태그
 				li = itemDoc.select(".sparkling-hash").select("li");
 				tag = "";
 				for(int j=0; j<li.size(); j++) {
-					tag += li.get(j).select("span").html() + " | ";
+					tag += li.get(j).select("span").html() + ",";
 				}
-				itemList[i][7] = tag;
-				System.out.println("["+i+"] tag " + itemList[i][colSize-1]);
+				itemList[i][6] = tag;
+				System.out.println("["+i+"] tag " + itemList[i][6]);
  			}
 			
 			// 엑셀 삽입
@@ -107,5 +104,19 @@ public class MyEn {
 		}
 
 	}
+	
+	public static String replaceStr(String a) {
+		a= a.replaceAll("\\&", "&amp;");
+		a= a.replaceAll("\\&amp;nbsp;", "&nbsp;");
+		a= a.replaceAll("\\&amp;amp;", "&amp;");
+		a= a.replaceAll("\"", "&quot;");
+		a= a.replaceAll("\'", "&#39;");
+		a= a.replaceAll("\\(", "&#40;");
+		a= a.replaceAll("\\)", "&#41;");
+		a= a.replaceAll(";;", ";");
+		a= a.replaceAll("<br>", "<br/>");
+		
+		return a;
+	}	
 
 }

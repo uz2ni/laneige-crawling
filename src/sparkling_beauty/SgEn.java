@@ -19,7 +19,7 @@ public class SgEn {
 		File input = new File("/Users/uzini/Desktop/Sparkling Beauty/sg_en/Sparkling Beauty.html");
 		try {
 			//스파클링 뷰티 html 문서 불러오기
-			Document doc = Jsoup.parse(input, "UTF-8", "https://www.laneige.com/sg/en/sparkling-beauty.html");
+			Document doc = Jsoup.parse(input, "UTF-8", "https://www.laneige.com/sg/en/at-laneige/sparkling-beauty.html");
 			
 			// 각 item의 href 파싱
 			Elements el = doc.select(".sparkling-list-item").not(".sparkling-banner");
@@ -31,8 +31,9 @@ public class SgEn {
 			}
 			
 			// href 접속
+			int colSize = 8;
 			Document itemDoc;
-			String[][] itemList = new String[el.size()][6];
+			String[][] itemList = new String[el.size()][colSize];
 			String src;
 			Elements li;
 			String tag = "";
@@ -46,20 +47,20 @@ public class SgEn {
 				itemList[i][1] = itemDoc.select("meta[property^=og:title]").attr("content");
 				System.out.println("["+i+"] og:title : " + itemList[i][1]);
 				// [2] 제목
-				itemList[i][2] = itemDoc.select(".content_Title").html();
+				itemList[i][2] = replaceStr(itemDoc.select(".content_Title").html());
 				System.out.println("["+i+"] 제목 : " + itemList[i][2]);
 				// [3] img src
 				src = itemDoc.select(".custom-sparkling-view-imgtype").select("img").attr("src");
 				itemList[i][3] = src.substring(src.lastIndexOf("/")+1);
 				System.out.println("["+i+"] src : " + itemList[i][3]);
 				// [4] 내용 p
-				itemList[i][4] = itemDoc.select(".sparkling-view-context").select("p").html();
+				itemList[i][4] = replaceStr(itemDoc.select(".sparkling-view-context").select("p").html());
 				System.out.println("["+i+"] 내용 : " + itemList[i][4]);
 				// [5] 태그
 				li = itemDoc.select(".sparkling-hash").select("li");
 				tag = "";
 				for(int j=0; j<li.size(); j++) {
-					tag += li.get(j).select("span").html() + " | ";
+					tag += li.get(j).select("span").html() + ",";
 				}
 				itemList[i][5] = tag;
 				System.out.println("["+i+"] tag " + itemList[i][5]);
@@ -75,7 +76,7 @@ public class SgEn {
 	        
 	        for(int i=0; i<el.size(); i++) {
 	        	row = sheet.createRow(i);
-	        	for(int j=0; j<6; j++) {
+	        	for(int j=0; j<colSize; j++) {
 	        		cell = row.createCell(j);
 	        		cell.setCellValue(itemList[i][j]);
 	        	}
@@ -100,5 +101,19 @@ public class SgEn {
 		}
 
 	}
+	
+	public static String replaceStr(String a) {
+		a= a.replaceAll("\\&", "&amp;");
+		a= a.replaceAll("\\&amp;nbsp;", "&nbsp;");
+		a= a.replaceAll("\\&amp;amp;", "&amp;");
+		a= a.replaceAll("\"", "&quot;");
+		a= a.replaceAll("\'", "&#39;");
+		a= a.replaceAll("\\(", "&#40;");
+		a= a.replaceAll("\\)", "&#41;");
+		a= a.replaceAll(";;", ";");
+		a= a.replaceAll("<br>", "<br/>");
+		
+		return a;
+	}	
 
 }
